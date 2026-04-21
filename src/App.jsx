@@ -35,7 +35,7 @@ function App() {
     )
 
     if (!match) {
-      setError('查無白名單資料，請確認全名與 AD 帳號是否正確')
+      setError('查無符合的使用者資料，請確認全名與 AD 帳號是否正確')
       return
     }
 
@@ -156,7 +156,7 @@ function App() {
             <div className="hero-copy">
               <div className="hero-badge">消防局訓練中心</div>
               <h1>消防局圖書借閱系統</h1>
-              <p>以手機快速完成白名單驗證、掃碼借閱與借閱登記。</p>
+              <p>以手機快速完成身分確認、掃碼借閱與借閱登記。</p>
             </div>
             <div className="hero-side-card">
               <img src="./images/fire-reading.jpg" alt="消防閱讀插圖" className="hero-mascot" />
@@ -173,7 +173,7 @@ function App() {
             <div className="section-heading">
               <div>
                 <h2>登入驗證</h2>
-                <p className="hint">請輸入全名與 AD 帳號進行白名單比對</p>
+                <p className="hint">請輸入全名與 AD 帳號完成身分確認</p>
               </div>
               <div className="mini-photo-card">
                 <img src="./images/firefighter-team.jpg" alt="消防員現場勤務照片" />
@@ -198,7 +198,7 @@ function App() {
                   placeholder="例如：aa9987"
                 />
               </label>
-              <button type="submit">登入並驗證白名單</button>
+              <button type="submit">登入系統</button>
             </form>
 
             <div className="demo-box">
