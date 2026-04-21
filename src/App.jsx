@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Html5QrcodeScanner } from 'html5-qrcode'
+import { useMemo, useRef, useState } from 'react'
+import { Html5Qrcode } from 'html5-qrcode'
 import './App.css'
 
 const whitelist = [
@@ -21,6 +21,8 @@ function App() {
   const [error, setError] = useState('')
   const [records, setRecords] = useState([])
   const [scannerStarted, setScannerStarted] = useState(false)
+  const [scannerMessage, setScannerMessage] = useState('點下方按鈕後，系統會請求相機權限')
+  const qrRef = useRef(null)
 
   const currentTime = useMemo(() => new Date().toLocaleString('zh-TW'), [records.length])
 
@@ -49,25 +51,55 @@ function App() {
     setStep('confirm')
   }
 
-  const startCamera = () => {
-    if (scannerStarted) return
-    setScannerStarted(true)
-    setTimeout(() => {
+  const stopCamera = async () => {
+    if (qrRef.current) {
       try {
-        const scanner = new Html5QrcodeScanner('reader', { fps: 10, qrbox: 220 }, false)
-        scanner.render(
-          (decodedText) => {
-            const found = mockBooks[decodedText] || { id: decodedText, title: `書籍代碼 ${decodedText}`, category: '未分類' }
-            setBook(found)
-            setStep('confirm')
-            scanner.clear().catch(() => {})
-          },
-          () => {},
-        )
-      } catch {
-        setError('鏡頭初始化失敗，先用下方模擬掃碼即可')
+        if (qrRef.current.isScanning) {
+          await qrRef.current.stop()
+        }
+        await qrRef.current.clear()
+      } catch {}
+      qrRef.current = null
+    }
+    setScannerStarted(false)
+  }
+
+  const startCamera = async () => {
+    if (scannerStarted) return
+    setError('')
+    setScannerMessage('正在請求相機權限...')
+
+    try {
+      const devices = await Html5Qrcode.getCameras()
+      if (!devices || devices.length === 0) {
+        setScannerMessage('找不到可用鏡頭，請確認手機瀏覽器有相機權限')
+        return
       }
-    }, 100)
+
+      const cameraId = devices[0].id
+      const scanner = new Html5Qrcode('reader')
+      qrRef.current = scanner
+
+      await scanner.start(
+        cameraId,
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        async (decodedText) => {
+          const found = mockBooks[decodedText] || { id: decodedText, title: `書籍代碼 ${decodedText}`, category: '未分類' }
+          setBook(found)
+          setScannerMessage(`已掃描到：${decodedText}`)
+          await stopCamera()
+          setStep('confirm')
+        },
+        () => {},
+      )
+
+      setScannerStarted(true)
+      setScannerMessage('鏡頭已開啟，請將書本 QR Code 對準框內')
+    } catch (err) {
+      setScannerStarted(false)
+      setScannerMessage('無法開啟鏡頭，請允許瀏覽器使用相機，或先用模擬掃碼')
+      setError(err?.message || '鏡頭初始化失敗')
+    }
   }
 
   const confirmBorrow = () => {
@@ -84,9 +116,9 @@ function App() {
     setStep('success')
   }
 
-  const resetToHome = () => {
+  const resetToHome = async () => {
     setBook(null)
-    setScannerStarted(false)
+    await stopCamera()
     setStep('home')
   }
 
@@ -149,10 +181,10 @@ function App() {
             <h2>掃描書籍 QR Code</h2>
             <p className="hint">可用手機鏡頭掃描，或先按模擬掃碼展示流程</p>
             <div id="reader" className="reader-box" />
-            <p className="scan-note">如果上面跳出英文相機權限按鈕，那是套件內建畫面，正式版我會改成全中文。</p>
-            <button onClick={startCamera}>啟動鏡頭</button>
+            <p className="scan-note">{scannerMessage}</p>
+            <button onClick={startCamera}>開啟鏡頭並請求權限</button>
             <button className="secondary" onClick={startMockScan}>模擬掃到一本書</button>
-            <button className="ghost" onClick={() => setStep('home')}>返回首頁</button>
+            <button className="ghost" onClick={resetToHome}>返回首頁</button>
           </section>
         )}
 
