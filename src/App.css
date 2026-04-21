@@ -68,7 +68,8 @@ button.ghost {
 }
 
 .card {
-  background: #fff;
+  background: #ffffff;
+  color: #17212b;
   border-radius: 22px;
   padding: 20px;
   box-shadow: 0 18px 48px rgba(18, 38, 63, 0.08);
@@ -97,10 +98,15 @@ label {
 
 input {
   width: 100%;
-  border: 1px solid #d7e0ea;
+  border: 1px solid #c8d4e0;
   border-radius: 14px;
   padding: 14px;
   background: #f9fbfd;
+  color: #17212b;
+}
+
+input::placeholder {
+  color: #6b7a8c;
 }
 
 .hint {
@@ -115,6 +121,7 @@ input {
 
 .demo-box {
   background: #f5f8fc;
+  color: #17212b;
   border-radius: 14px;
   padding: 12px 14px;
   line-height: 1.6;
@@ -160,6 +167,7 @@ input {
 
 .record-item {
   background: #f7f9fc;
+  color: #17212b;
   border-radius: 14px;
   padding: 14px;
   line-height: 1.6;
