@@ -149,6 +149,7 @@ function App() {
             <h2>掃描書籍 QR Code</h2>
             <p className="hint">可用手機鏡頭掃描，或先按模擬掃碼展示流程</p>
             <div id="reader" className="reader-box" />
+            <p className="scan-note">如果上面跳出英文相機權限按鈕，那是套件內建畫面，正式版我會改成全中文。</p>
             <button onClick={startCamera}>啟動鏡頭</button>
             <button className="secondary" onClick={startMockScan}>模擬掃到一本書</button>
             <button className="ghost" onClick={() => setStep('home')}>返回首頁</button>
