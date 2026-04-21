@@ -3,7 +3,7 @@ import { Html5Qrcode } from 'html5-qrcode'
 import './App.css'
 
 const whitelist = [
-  { ad: 'leif.huang', name: 'Leif Huang', dept: '消防局訓練科', title: '承辦人' },
+  { ad: 'aa9987', name: '黃紅賊', dept: '訓練中心', title: '隊員' },
   { ad: 'wang.fire', name: '王小明', dept: '消防局救災救護指揮中心', title: '隊員' },
 ]
 
@@ -150,7 +150,7 @@ function App() {
       <div className="phone-frame">
         <header className="app-header">
           <h1>消防局圖書借閱系統</h1>
-          <p>前端展示版</p>
+          <p>手機借閱與掃碼登記</p>
         </header>
 
         {step === 'login' && (
@@ -163,7 +163,7 @@ function App() {
                 <input
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="例如：Leif Huang"
+                  placeholder="例如：黃紅賊"
                 />
               </label>
               <label>
@@ -171,15 +171,17 @@ function App() {
                 <input
                   value={form.ad}
                   onChange={(e) => setForm({ ...form, ad: e.target.value })}
-                  placeholder="例如：leif.huang"
+                  placeholder="例如：aa9987"
                 />
               </label>
               <button type="submit">登入並驗證白名單</button>
             </form>
             <div className="demo-box">
               <strong>測試帳號</strong>
-              <div>姓名：Leif Huang</div>
-              <div>AD：leif.huang</div>
+              <div>姓名：黃紅賊</div>
+              <div>AD：aa9987</div>
+              <div>單位：訓練中心</div>
+              <div>職稱：隊員</div>
             </div>
             {error && <p className="error">{error}</p>}
           </section>
