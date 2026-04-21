@@ -147,16 +147,40 @@ function App() {
 
   return (
     <div className="app-shell">
+      <div className="page-glow page-glow-top" />
+      <div className="page-glow page-glow-bottom" />
+
       <div className="phone-frame">
         <header className="app-header">
-          <h1>消防局圖書借閱系統</h1>
-          <p>手機借閱與掃碼登記</p>
+          <div className="hero-banner">
+            <div className="hero-copy">
+              <div className="hero-badge">消防局訓練中心</div>
+              <h1>消防局圖書借閱系統</h1>
+              <p>以手機快速完成白名單驗證、掃碼借閱與借閱登記。</p>
+            </div>
+            <div className="hero-side-card">
+              <img src="./images/fire-reading.jpg" alt="消防閱讀插圖" className="hero-mascot" />
+              <div className="hero-side-text">
+                <strong>今日借閱提醒</strong>
+                <span>先登入，再開後置鏡頭掃描書籍 QR Code。</span>
+              </div>
+            </div>
+          </div>
         </header>
 
         {step === 'login' && (
-          <section className="card">
-            <h2>登入</h2>
-            <p className="hint">請輸入全名與 AD 帳號進行白名單比對</p>
+          <section className="card card-login">
+            <div className="section-heading">
+              <div>
+                <h2>登入驗證</h2>
+                <p className="hint">請輸入全名與 AD 帳號進行白名單比對</p>
+              </div>
+              <div className="mini-photo-card">
+                <img src="./images/firefighter-team.jpg" alt="消防員現場勤務照片" />
+                <span>感謝每一位執勤弟兄姊妹</span>
+              </div>
+            </div>
+
             <form className="form" onSubmit={handleLogin}>
               <label>
                 全名
@@ -176,6 +200,7 @@ function App() {
               </label>
               <button type="submit">登入並驗證白名單</button>
             </form>
+
             <div className="demo-box">
               <strong>測試帳號</strong>
               <div>姓名：黃紅賊</div>
@@ -189,33 +214,51 @@ function App() {
 
         {step === 'home' && user && (
           <section className="card">
-            <h2>使用者首頁</h2>
+            <div className="section-heading compact">
+              <div>
+                <h2>使用者首頁</h2>
+                <p className="hint">登入完成後，可直接進入掃碼借閱流程</p>
+              </div>
+            </div>
             <div className="info-grid">
               <div><span>姓名</span><strong>{user.name}</strong></div>
               <div><span>AD</span><strong>{user.ad}</strong></div>
               <div><span>單位</span><strong>{user.dept}</strong></div>
               <div><span>職稱</span><strong>{user.title}</strong></div>
             </div>
-            <button onClick={() => setStep('scan')}>開啟鏡頭掃碼</button>
-            <button className="secondary" onClick={() => setStep('records')}>查看借閱紀錄</button>
+            <div className="action-stack">
+              <button onClick={() => setStep('scan')}>開啟鏡頭掃碼</button>
+              <button className="secondary" onClick={() => setStep('records')}>查看借閱紀錄</button>
+            </div>
           </section>
         )}
 
         {step === 'scan' && (
           <section className="card">
-            <h2>掃描書籍 QR Code</h2>
-            <p className="hint">可用手機鏡頭掃描，或先按模擬掃碼展示流程</p>
+            <div className="section-heading compact">
+              <div>
+                <h2>掃描書籍 QR Code</h2>
+                <p className="hint">可用手機鏡頭掃描，或先按模擬掃碼展示流程</p>
+              </div>
+            </div>
             <div id="reader" className="reader-box" />
             <p className="scan-note">{scannerMessage}</p>
-            <button onClick={startCamera}>開啟後置鏡頭並請求權限</button>
-            <button className="secondary" onClick={startMockScan}>模擬掃描一本書</button>
-            <button className="ghost" onClick={resetToHome}>返回首頁</button>
+            <div className="action-stack">
+              <button onClick={startCamera}>開啟後置鏡頭並請求權限</button>
+              <button className="secondary" onClick={startMockScan}>模擬掃描一本書</button>
+              <button className="ghost" onClick={resetToHome}>返回首頁</button>
+            </div>
           </section>
         )}
 
         {step === 'confirm' && user && book && (
           <section className="card">
-            <h2>借閱確認</h2>
+            <div className="section-heading compact">
+              <div>
+                <h2>借閱確認</h2>
+                <p className="hint">請確認借閱人資訊與書籍資訊是否正確</p>
+              </div>
+            </div>
             <div className="info-grid">
               <div><span>借閱人</span><strong>{user.name}</strong></div>
               <div><span>單位</span><strong>{user.dept}</strong></div>
@@ -224,24 +267,38 @@ function App() {
               <div><span>書號</span><strong>{book.id}</strong></div>
               <div><span>分類</span><strong>{book.category}</strong></div>
             </div>
-            <button onClick={confirmBorrow}>確認借閱</button>
-            <button className="ghost" onClick={resetToHome}>取消</button>
+            <div className="action-stack">
+              <button onClick={confirmBorrow}>確認借閱</button>
+              <button className="ghost" onClick={resetToHome}>取消</button>
+            </div>
           </section>
         )}
 
         {step === 'success' && user && book && (
           <section className="card success-card">
-            <h2>借閱成功</h2>
-            <p>{user.name} 已借閱《{book.title}》</p>
+            <div className="section-heading compact">
+              <div>
+                <h2>借閱成功</h2>
+                <p className="hint">系統已完成登記，可返回首頁或查看紀錄</p>
+              </div>
+            </div>
+            <p className="success-copy">{user.name} 已借閱《{book.title}》</p>
             <p className="hint">登記時間：{currentTime}</p>
-            <button onClick={resetToHome}>回首頁</button>
-            <button className="secondary" onClick={() => setStep('records')}>查看借閱紀錄</button>
+            <div className="action-stack">
+              <button onClick={resetToHome}>回首頁</button>
+              <button className="secondary" onClick={() => setStep('records')}>查看借閱紀錄</button>
+            </div>
           </section>
         )}
 
         {step === 'records' && (
           <section className="card">
-            <h2>借閱紀錄</h2>
+            <div className="section-heading compact">
+              <div>
+                <h2>借閱紀錄</h2>
+                <p className="hint">可查看目前登記的借閱資訊</p>
+              </div>
+            </div>
             {records.length === 0 ? (
               <p className="hint">目前尚無借閱紀錄</p>
             ) : (
@@ -256,7 +313,9 @@ function App() {
                 ))}
               </div>
             )}
-            <button onClick={() => setStep('home')}>返回首頁</button>
+            <div className="action-stack">
+              <button onClick={() => setStep('home')}>返回首頁</button>
+            </div>
           </section>
         )}
       </div>
